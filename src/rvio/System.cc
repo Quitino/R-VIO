@@ -18,12 +18,14 @@
 * along with R-VIO. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <Eigen/Core>
-
+#include <fstream>
 #include <boost/thread.hpp>
+
+#include <Eigen/Core>
 
 #include <opencv2/core/core.hpp>
 
+#include <ros/package.h>
 #include <nav_msgs/Path.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <geometry_msgs/TransformStamped.h>
@@ -34,6 +36,10 @@
 
 namespace RVIO
 {
+
+// Record the outputs
+std::string pkg_path = ros::package::getPath("rvio");
+static std::ofstream fPoseResults(pkg_path+"/result/pose_ests.dat");
 
 nav_msgs::Path path;
 
@@ -73,13 +79,13 @@ System::System(const std::string& strSettingsFile)
     const int bEnableAlignment = fsSettings["INI.EnableAlignment"];
     mbEnableAlignment = bEnableAlignment;
 
+    const int bRecordOutputs = fsSettings["INI.RecordOutputs"];
+    mbRecordOutputs = bRecordOutputs;
+
     mnInitTimeLength = fsSettings["INI.nTimeLength"];
 
     mnThresholdAngle = fsSettings["INI.nThresholdAngle"];
     mnThresholdDispl = fsSettings["INI.nThresholdDispl"];
-
-    xkk.setZero(26,1);
-    Pkk.setZero(24,24);
 
     mbIsInitialized = false;
     mbIsMoving = false;
@@ -230,7 +236,7 @@ void System::MonoVIO(const cv::Mat& im, const double& timestamp, const int& seq)
     /**
      * Visual tracking & Propagation
      */
-    boost::thread thdTracking(&Tracker::track, mpTracker, im, std::ref(xkk), std::ref(lImuDataSeq));
+    boost::thread thdTracking(&Tracker::track, mpTracker, std::ref(im), std::ref(lImuDataSeq));
     boost::thread thdPropagate(&PreIntegrator::propagate, mpPreIntegrator, std::ref(xkk), std::ref(Pkk), std::ref(lImuDataSeq));
 
     thdTracking.join();
@@ -321,6 +327,14 @@ void System::MonoVIO(const cv::Mat& im, const double& timestamp, const int& seq)
 
     gk = Rk*gk;
     gk.normalize();
+
+    if (mbRecordOutputs)
+    {
+        fPoseResults << std::setprecision(19) << timestamp << " "
+                     << pGk(0) << " " << pGk(1) << " " << pGk(2) << " "
+                     << qkG(0) << " " << qkG(1) << " " << qkG(2) << " " << qkG(3) << "\n";
+        fPoseResults.flush();
+    }
 
     // Pk
     Eigen::Matrix<double,24,24> Vk;

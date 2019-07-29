@@ -61,6 +61,7 @@ private:
     int mnMinCloneStates;
 
     bool mbEnableAlignment;
+    bool mbRecordOutputs;
 
     bool mbIsInitialized;
     bool mbIsMoving;
@@ -93,6 +94,6 @@ private:
     tf::TransformBroadcaster mTfPub;
 };
 
-}// namespace RVIO
+} // namespace RVIO
 
 #endif

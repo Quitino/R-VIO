@@ -41,6 +41,10 @@ First, `git clone` the repository and `catkin_make` it. Then, to run `rvio` with
   ```
   Terminal 4: rosbag play --pause V1_01_easy.bag /cam0/image_raw:=/camera/image_raw /imu0:=/imu
   ```
+  这一步不要暂停
+  ```
+  Terminal 4: rosbag play V1_01_easy.bag /cam0/image_raw:=/camera/image_raw /imu0:=/imu
+  ```
 You can also run R-VIO with your own sensor (data) by creating a config file `rvio_NAME_OF_YOUR_DATA.yaml` in *config* folder and the corresponding launch file `NAME_OF_YOUR_DATA.launch` in *launch* folder referring to the above EuRoC example.
 
 ## 3. License

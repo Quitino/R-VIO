@@ -1,5 +1,7 @@
 # R-VIO
 
+[泡泡机器人推荐词](https://mp.weixin.qq.com/s?__biz=MzI5MTM1MTQwMw==&mid=2247507341&idx=2&sn=0256b30772fe95bc7d98bf61dbf7f1a8&chksm=ec136389db64ea9f8f56d8d97b6e625cdda209fb605398dfa2d9f5177f140cfaecc959818e70&mpshare=1&scene=1&srcid=0814qJcuD2VFBKnFwfYN9d9j&sharer_sharetime=1565766351017&sharer_shareid=662e33bcf39b24da66575a9f1c3f9ab8&pass_ticket=F%2FDcQUFoziFQRIZO5nFqbGSWQROwfTXyyFj%2B3FTug77yGQBpxqgMTzUTPyXdfXYW#rd)
+
 R-VIO is an efficient, lightweight, **robocentric visual-inertial odometry** algorithm for consistent 3D motion tracking using only a monocular camera and a 6-axis IMU. Different from standard world-centric VINS algorithms which directly estimate absolute motion of the sensing platform with respect to a fixed, gravity-aligned, global frame of reference, R-VIO estimates the relative motion of higher accuracy with respect to a moving local frame (for example, IMU frame) and updates the global pose (orientation and position) estimate through composition. This algorithm is developed with the robocentric sliding-window filtering-based VIO framework that we originally proposed in our *IROS2018* paper and further extended in our recent *IJRR* paper:
 
 - Zheng Huai and Guoquan Huang, **Robocentric visual-inertial odometry**, *The International Journal of Robotics Research (IJRR)*, July 2019: [here](https://journals.sagepub.com/doi/10.1177/0278364919853361).
